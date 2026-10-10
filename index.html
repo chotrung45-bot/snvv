@@ -206,7 +206,6 @@
             <!-- Avatar Frame Interactive -->
             <div class="avatar-container my-4" onclick="openGiftBox()">
                 <div id="giftBox" class="avatar-frame">
-                    <!-- THAY LINK ẢNH HOẶC TÊN FILE ẢNH CỦA CHỊ BẠN VÀO ĐÂY -->
                     <img src="123.jpeg" alt="Chị Hoàng Thị Gia Linh">
                 </div>
             </div>
@@ -359,17 +358,28 @@
 
         let isGiftOpened = false;
 
-       function handleFormSubmit(e) {
+        function handleFormSubmit(e) {
             e.preventDefault();
-            const dateInput = document.getElementById('birthdate').value; // Định dạng trả về: YYYY-MM-DD
+            const dateInput = document.getElementById('birthdate').value; // Lấy giá trị chuỗi YYYY-MM-DD từ input date
             const errorMsg = document.getElementById('errorMsg');
             const stepForm = document.getElementById('stepForm');
 
-            // Cố định ngày sinh chính xác cần kiểm tra: 10/10/2012
-            const targetDate = "2012-10-10";
+            // Ngày sinh chính xác cần kiểm tra: 10/10/2012 (Có thể đổi lại ở đây nếu cần)
+            const targetYear = "2012";
+            const targetMonth = "10";
+            const targetDay = "10";
 
-            if (!dateInput || dateInput !== targetDate) {
-                // Hiển thị lỗi nếu để trống hoặc nhập sai ngày
+            if (!dateInput) {
+                errorMsg.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i><span>Vui lòng chọn ngày sinh nhật!</span>`;
+                errorMsg.classList.remove('hidden');
+                return;
+            }
+
+            // Tách chuỗi ngày tháng năm từ input để kiểm tra an toàn, tránh lỗi lệch múi giờ
+            const [year, month, day] = dateInput.split('-');
+
+            if (year !== targetYear || month !== targetMonth || day !== targetDay) {
+                // Hiển thị lỗi nếu nhập sai ngày
                 errorMsg.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i><span>Ngày sinh chưa chính xác! Hãy thử lại nha (Gợi ý: 10/10/2012).</span>`;
                 errorMsg.classList.remove('hidden');
                 
@@ -378,9 +388,8 @@
                 return;
             }
 
-            // Nếu nhập đúng ngày 10/10/2012:
+            // Nếu nhập đúng ngày:
             errorMsg.classList.add('hidden');
-            const [year, month, day] = dateInput.split('-');
             document.getElementById('displayDate').innerText = `🎂 ${day}/${month}/${year}`;
 
             stepForm.classList.add('opacity-0', 'scale-95');
